@@ -4,135 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Image Labeler</title>
-    <style>
-        * {
-            box-sizing: border-box;
-        }
-
-        body {
-            margin: 0;
-            min-height: 100vh;
-            font-family: Arial, sans-serif;
-            color: #f6f2ea;
-            background: #181818;
-        }
-
-        .page {
-            min-height: 100vh;
-            display: grid;
-            grid-template-rows: auto 1fr auto;
-        }
-
-        header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 16px;
-            padding: 16px 24px;
-            border-bottom: 1px solid #343434;
-        }
-
-        h1 {
-            margin: 0;
-            font-size: 20px;
-            font-weight: 700;
-        }
-
-        .counter {
-            color: #cfc7b8;
-            font-size: 14px;
-        }
-
-        main {
-            display: grid;
-            place-items: center;
-            padding: 24px;
-            min-height: 0;
-        }
-
-        .image-stage {
-            width: min(100%, 1100px);
-            height: min(72vh, 760px);
-            display: grid;
-            place-items: center;
-            border: 1px solid #343434;
-            background: #101010;
-            overflow: hidden;
-        }
-
-        img {
-            max-width: 100%;
-            max-height: 100%;
-            object-fit: contain;
-            display: block;
-        }
-
-        .empty {
-            color: #cfc7b8;
-            text-align: center;
-            line-height: 1.5;
-        }
-
-        footer {
-            padding: 16px 24px 24px;
-            border-top: 1px solid #343434;
-            background: #202020;
-        }
-
-        form {
-            max-width: 900px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: repeat(4, minmax(120px, 1fr));
-            gap: 12px;
-        }
-
-        button {
-            min-height: 48px;
-            border: 1px solid #4a4a4a;
-            border-radius: 8px;
-            color: #f6f2ea;
-            background: #2b2b2b;
-            font-size: 15px;
-            font-weight: 700;
-            text-transform: capitalize;
-            cursor: pointer;
-        }
-
-        button:hover {
-            background: #3a3a3a;
-        }
-
-        button:focus-visible {
-            outline: 3px solid #d7aa52;
-            outline-offset: 2px;
-        }
-
-        @media (max-width: 640px) {
-            header {
-                align-items: flex-start;
-                flex-direction: column;
-            }
-
-            main {
-                padding: 12px;
-            }
-
-            .image-stage {
-                height: 64vh;
-            }
-
-            form {
-                grid-template-columns: repeat(2, minmax(0, 1fr));
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
     <div class="page">
         <header>
             <h1>Image Labeler</h1>
-            <div class="counter">{{ labeled_count }} / {{ total_count }} labeled</div>
+            <div class="counter">{{ labeled_count }} labeled, {{ skipped_count }} skipped / {{ total_count }} total</div>
         </header>
 
         <main>
@@ -155,6 +33,9 @@
                     {% for label in labels %}
                         <button type="submit" name="label" value="{{ label }}">{{ label }}</button>
                     {% endfor %}
+                    <button class="skip-button" type="submit" formaction="{{ url_for('skip_image') }}">
+                        Skip
+                    </button>
                 </form>
             {% endif %}
         </footer>
